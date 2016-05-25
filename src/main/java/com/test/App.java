@@ -12,7 +12,7 @@ public class App {
 	 * @author ialexei
 	 *
 	 */
-	public interface NonImmutableIfc {
+	public interface MutableIfc {
 		
 		void setName(String name);
 		String getName();
@@ -23,7 +23,7 @@ public class App {
 	 * @author ialexei
 	 *
 	 */
-	public class NonImmutable implements NonImmutableIfc {
+	public class Mutable implements MutableIfc {
 
 		private String name = "";
 		public void setName(String name) {
@@ -42,14 +42,14 @@ public class App {
 	 */
 	public class TrulyImmutable {
 	
-		private final Immutable<NonImmutableIfc> immutable; 
+		private final Immutable<MutableIfc> immutable; 
 		
-		public TrulyImmutable(NonImmutableIfc nonImmutableIfc) {
+		public TrulyImmutable(MutableIfc nonImmutableIfc) {
 			
 			this.immutable = 
-					new Immutable<App.NonImmutableIfc>(
-							new NonImmutable(), 
-							NonImmutableIfc.class);
+					new Immutable<App.MutableIfc>(
+							new Mutable(), 
+							MutableIfc.class);
 		}
 		
 		/**
@@ -57,14 +57,14 @@ public class App {
 		 * Any calls to setXXX will be intercepted and an exception will be generated.
 		 * @return
 		 */
-		public NonImmutableIfc getNonImmutable() {
+		public MutableIfc getNonImmutable() {
 			return immutable.get();
 		}
 	}
 	
 	public void test() {
 		
-		TrulyImmutable trulyImmutable = new TrulyImmutable(new NonImmutable());
+		TrulyImmutable trulyImmutable = new TrulyImmutable(new Mutable());
 		try {
 			trulyImmutable.getNonImmutable().getName();
 		}catch(Throwable ex) {
